@@ -1,0 +1,40 @@
+name: Action
+
+on:
+  pull_request:
+    paths-ignore:
+    - '**.md'
+  push:
+    branches: [master]
+    paths-ignore:
+    - '**.md'
+  schedule:
+    - cron:  '*/1 * * * *'
+
+jobs:
+  e2e-tests:
+    name: "E2E tests: with ${{ matrix.gutenberg }} plugin"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20  # 2021-01-18: Successful runs seem to take 9-12 minutes
+    strategy:
+      fail-fast: false
+      matrix:
+        gutenberg: [ 'no', 'latest', 'pre-release' ]
+    env:
+      GUTENBERG: ${{ matrix.gutenberg }}
+    if: github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run all tests
+      if: github.event_name != 'schedule' && matrix.gutenberg == 'no'
+      run: echo "Running all tests for $GUTENBERG"
+
+    - name: Run only blocks tests with latest Gutenberg
+      if: github.event_name != 'schedule' && matrix.gutenberg == 'latest'
+      run: echo "Running latest tests for $GUTENBERG"
+
+    - name: Scheduled run blocks tests with pre-release Gutenberg
+      if: github.event_name == 'schedule' && matrix.gutenberg == 'pre-release'
+      run: echo "Running schedule tests for $GUTENBERG"
