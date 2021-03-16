@@ -19,9 +19,9 @@ jobs:
         with:
           node-version: ${{ steps.versions.outputs.node-version }}
 
-      # - name: Building Action
-      #   run: npm install
-      #   working-directory: ./.github/actions/repo-gardening
+      - name: Building Action
+        run: npm install
+        working-directory: ./.github/actions/my-action
 
       - name: "Run the action"
         uses: ./.github/actions/my-action
