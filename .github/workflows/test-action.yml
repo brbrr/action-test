@@ -7,7 +7,7 @@ on:
       - master # Every time a PR is merged to master.
 
 jobs:
-  repo-gardening:
+  test:
     name: "Manage labels and assignees"
     runs-on: ubuntu-latest
     steps:
