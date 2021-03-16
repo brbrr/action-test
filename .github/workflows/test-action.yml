@@ -1,36 +1,28 @@
 name: Action
-
 on:
-  pull_request:
+  pull_request: # When a PR is opened, edited, updated, or a label is added.
+    types: [opened, synchronize, labeled, edited]
   push:
-    branches: [master]
-  schedule:
-#     - cron:  '*/15 * * * *'
+    branches:
+      - master # Every time a PR is merged to master.
 
 jobs:
-  e2e-tests:
-    name: "E2E tests: with ${{ matrix.gutenberg }} plugin"
+  repo-gardening:
+    name: "Manage labels and assignees"
     runs-on: ubuntu-latest
-    timeout-minutes: 20  # 2021-01-18: Successful runs seem to take 9-12 minutes
-    strategy:
-      fail-fast: false
-      matrix:
-        gutenberg: [ 'no', 'latest', 'pre-release' ]
-    env:
-      GUTENBERG: ${{ matrix.gutenberg }}
-    if: github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Run all tests
-      if: github.event_name != 'schedule' && matrix.gutenberg == 'no'
-      run: echo "Running all tests for $GUTENBERG"
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ steps.versions.outputs.node-version }}
 
-    - name: Run only blocks tests with latest Gutenberg
-      if: github.event_name != 'schedule' && matrix.gutenberg == 'latest'
-      run: echo "Running latest tests for $GUTENBERG"
+      # - name: Building Action
+      #   run: npm install
+      #   working-directory: ./.github/actions/repo-gardening
 
-    - name: Scheduled run blocks tests with pre-release Gutenberg
-      if: github.event_name == 'schedule' && matrix.gutenberg == 'pre-release'
-      run: echo "Running schedule tests for $GUTENBERG"
+      - name: "Run the action"
+        uses: ./.github/actions/my-action
+
