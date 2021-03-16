@@ -11,5 +11,5 @@ function throughDirectory(dir) {
 }
 console.log('HELLO WORLD');
 console.log(process.env);
-
-console.log(throughDirectory( process.env.GITHUB_WORKSPACE ));
+throughDirectory( process.env.GITHUB_WORKSPACE )
+console.log(files);
