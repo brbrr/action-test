@@ -25,9 +25,9 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const result = await github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
-            console.log(result.data)
             const release = result.data.find( release => release.prerelease === true )
-            console.log(release)
+            console.log(release.assets)
+            console.log(release.assets.browser_download_url)
 
       - name: Building Action
         run: npm install
