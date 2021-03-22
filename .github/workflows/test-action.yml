@@ -19,6 +19,14 @@ jobs:
         with:
           node-version: ${{ steps.versions.outputs.node-version }}
 
+      - name: Get Gutenberg pre-release URL
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const result = github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
+            const release = result.find( release => release.prerelease === true )
+            console.log(result)
+
       - name: Building Action
         run: npm install
         working-directory: ./.github/actions/my-action
