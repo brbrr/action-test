@@ -27,7 +27,7 @@ jobs:
             const result = await github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
             const release = result.data.find( release => release.prerelease === true )
             console.log(release.assets)
-            console.log(release.assets.browser_download_url)
+            console.log(release.assets[0].browser_download_url)
 
       - name: Building Action
         run: npm install
