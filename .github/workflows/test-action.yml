@@ -24,8 +24,10 @@ jobs:
         with:
           script: |
             const result = github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
-            const release = result.find( release => release.prerelease === true )
             console.log(result)
+
+            # const release = result.find( release => release.prerelease === true )
+            # console.log(result)
 
       - name: Building Action
         run: npm install
