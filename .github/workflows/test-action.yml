@@ -24,7 +24,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const result = github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
+            const result = await github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
             console.log(result)
             const release = result.find( release => release.prerelease === true )
             console.log(release)
