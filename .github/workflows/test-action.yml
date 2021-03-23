@@ -31,6 +31,9 @@ jobs:
             console.log(release.assets)
             console.log(release.assets[0].browser_download_url)
 
+            const zip = await github.request(release.assets[0].browser_download_url)
+            console.log( zip )
+
             return release.assets[0].browser_download_url
       - name: Get result
         run: echo "${{steps.gb-url.outputs.result}}"
