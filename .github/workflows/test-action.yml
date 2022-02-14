@@ -13,35 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ steps.versions.outputs.node-version }}
-
-      - name: Get Gutenberg pre-release URL
-        id: gb-url
-        uses: actions/github-script@v3
-        with:
-          result-encoding: string
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const result = await github.repos.listReleases({ owner: 'wordpress', repo: 'gutenberg', })
-            const release = result.data.find( release => release.prerelease === true )
-            console.log(release.assets)
-            console.log(release.assets[0].browser_download_url)
-
-            const zip = await github.request(release.assets[0].browser_download_url)
-            console.log( zip )
-
-            return release.assets[0].browser_download_url
+     
       - name: Get result
-        run: echo "${{steps.gb-url.outputs.result}}"
-
-      - name: Building Action
-        run: npm install
-        working-directory: ./.github/actions/my-action
-
-      - name: "Run the action"
-        uses: ./.github/actions/my-action
-
+        run: echo &ENV
