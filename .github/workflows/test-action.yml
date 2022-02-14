@@ -12,4 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get result
-        run: printenv
+        run: |
+          printenv
+          cat $GITHUB_ENV
