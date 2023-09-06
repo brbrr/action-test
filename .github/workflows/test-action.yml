@@ -7,13 +7,27 @@ on:
       - master # Every time a PR is merged to master.
 
 jobs:
-  test:
-    name: "Manage labels and assignees"
+  build:
+    timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
-      - name: Get result
+      - name: test
+        timeout-minutes: 1
         run: |
-          echo "========"
-          echo $GITHUB_ENV
-          echo "========"
-          cat $GITHUB_ENV
+          while true; do echo 1; sleep 1; done
+
+      - name: run-always-step
+        if: ${{ always() }}
+        run: |
+          echo "run-always-step"
+          echo "${{ job.status }}"
+
+  run-always-job:
+    if: ${{ always() }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: run-always-job
+        run: |
+          echo "run-always-job"
+          echo "${{ needs.build.result }}"
