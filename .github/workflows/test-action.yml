@@ -19,8 +19,8 @@ jobs:
       - name: run-always-step
         if: ${{ always() }}
         run: |
-          echo "run-always-step"
-          echo "${{ job.status }}"
+          echo "Running: run-always-step"
+          echo "Job status: ${{ job.status }}"
 
   run-always-job:
     if: ${{ always() }}
@@ -29,5 +29,5 @@ jobs:
     steps:
       - name: run-always-job
         run: |
-          echo "run-always-job"
-          echo "${{ needs.build.result }}"
+          echo "Running: run-always-job"
+          echo "Build job result: ${{ needs.build.result }}"
