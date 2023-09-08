@@ -8,26 +8,18 @@ on:
 
 jobs:
   build:
-    timeout-minutes: 1
     runs-on: ubuntu-latest
-    steps:
-      - name: test
-        timeout-minutes: 1
-        run: |
-          while true; do echo 1; sleep 1; done
+    strategy:
+      matrix:
+        include:
+          - network: "chiado"
+            checkpoint-sync-url: "http://139.144.26.89:4000/"
+          - network: "sepolia"
+            checkpoint-sync-url: "https://beaconstate-sepolia.chainsafe.io"
+    name: "Run sync of ${{ matrix.network }} testnet"
 
-      - name: run-always-step
-        if: ${{ always() }}
-        run: |
-          echo "Running: run-always-step"
-          echo "Job status: ${{ job.status }}"
-
-  run-always-job:
-    if: ${{ always() }}
-    needs: build
-    runs-on: ubuntu-latest
     steps:
-      - name: run-always-job
+      - name: Log stuff
         run: |
-          echo "Running: run-always-job"
-          echo "Build job result: ${{ needs.build.result }}"
+          echo "Network: ${{ matrix.network }}"
+          echo "Checkpoint sync URL: ${{ matrix.checkpoint-sync-url }}"
