@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master # Every time a PR is merged to master.
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,6 +20,11 @@ jobs:
     name: "Run sync of ${{ matrix.network }} testnet"
 
     steps:
+      - name: Show GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+        shell: bash
       - name: Log stuff
         run: |
           echo "Network: ${{ matrix.network }}"
