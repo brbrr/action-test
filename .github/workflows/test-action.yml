@@ -23,10 +23,16 @@ jobs:
           echo "Checkpoint sync URL: ${{ matrix.checkpoint-sync-url }}"
           
       - name: Get Job ID
-        run: echo "The current job ID is $GITHUB_JOB"
-      
-      - name: Send Notification
+        id: get_job_id
         run: |
-          JOB_ID=$GITHUB_JOB
-          JOB_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs/$JOB_ID"
+          JOB_JSON=$(curl -sS -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs")
+          JOB_ID=$(echo $JOB_JSON | jq -r '.jobs[] | select(.name == "${{ github.job }}") | .id')
+          echo "JOB_ID=$JOB_ID" >> $GITHUB_OUTPUT
+
+      - name: Use Job ID
+        run: |
+          JOB_ID=${{ steps.get_job_id.outputs.JOB_ID }}
+          JOB_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/$JOB_ID"
+          echo "Job URL: $JOB_URL"
           # Use $JOB_URL in your notification
