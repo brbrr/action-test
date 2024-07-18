@@ -10,15 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - network: "chiado"
-            checkpoint-sync-url: "http://139.144.26.89:4000/"
-          - network: "sepolia"
-            checkpoint-sync-url: "https://beaconstate-sepolia.chainsafe.io"
     name: "Run sync of ${{ matrix.network }} testnet"
-
     steps:
       - name: Show GitHub context
         env:
@@ -29,3 +21,12 @@ jobs:
         run: |
           echo "Network: ${{ matrix.network }}"
           echo "Checkpoint sync URL: ${{ matrix.checkpoint-sync-url }}"
+          
+      - name: Get Job ID
+        run: echo "The current job ID is $GITHUB_JOB"
+      
+      - name: Send Notification
+        run: |
+          JOB_ID=$GITHUB_JOB
+          JOB_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs/$JOB_ID"
+          # Use $JOB_URL in your notification
