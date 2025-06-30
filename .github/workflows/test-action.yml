@@ -30,7 +30,7 @@ jobs:
 
       - name: test
         run: |
-          echo "ref: &{{github.ref}}"
-          echo "github: &{{ github }}"
+          echo "ref: ${{github.ref}}"
+          echo "github: ${{ github }}"
             # if: github.ref == 'refs/heads/main' 
           # && (github.event_name == 'push' || (github.event_name == 'pull_request_target' && github.event.action == 'labeled' && github.event.label.name == 'cortex'))
