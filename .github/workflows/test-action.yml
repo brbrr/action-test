@@ -1,6 +1,7 @@
 name: Action
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     branches:
       - master
   push:
